@@ -1,5 +1,7 @@
 package ArbolAvl;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rodrigo Mamani
@@ -159,26 +161,24 @@ class nodoAvl{
             nodo=nodo.der;
         return (T) nodo.valor; 
     }
-    public void inOrden(){
-        inOrden(root);
+    public ArrayList<T> inOrden(){
+        ArrayList<T> nodos = new ArrayList<>();
+        
+        inOrden(root, nodos);
         System.out.println();
+        return nodos;
     }
-    private void inOrden(nodoAvl nodo){
+    private ArrayList<T> inOrden(nodoAvl nodo,ArrayList nodos){
         if (nodo.valor != null) {
-            System.out.print("<");
-            if (nodo.izq != null) {
-                inOrden(nodo.izq);
-            } else {
-                System.out.print("*");
-            }
-            System.out.print(nodo.valor+"#"+nodo.factor+","+nodo.altura+"#");
-            if (nodo.der != null)  {
-                inOrden(nodo.der);
-            } else {
-                System.out.print("*");
-            }
-            System.out.print(">");
+
+            if (nodo.izq != null)inOrden(nodo.izq,nodos);
+            //System.out.print(nodo.valor+"-");
+            nodos.add(nodo.valor);
+            
+            if (nodo.der != null) inOrden(nodo.der,nodos);
+
         }
+        return nodos;
     }  
 }
 

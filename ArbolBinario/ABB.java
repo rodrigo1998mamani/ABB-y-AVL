@@ -1,26 +1,35 @@
 package ArbolBinario;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rodrigo Mamani
  */
-public class ABB <T extends Comparable<T>>{
+public class ABB<T extends Comparable<T>> {
 
     private T valor;
     private ABB izq;
     private ABB der;
     private ABB padre;
+    private static int cuenta = 0;
+    
+
+    public int tamano() {
+        return cuenta = 0;
+    }
 
     private void insertarConPadre(T dato, ABB padre) {
         if (valor == null) {
             valor = dato;
             this.padre = padre;
+            cuenta++;
         } else if (dato.compareTo(this.valor) < 0) {
             if (izq == null) {
                 izq = new ABB();
             }
             izq.insertarConPadre(dato, this);
-        } else if (dato.compareTo(this.valor) > 0 ) {
+        } else if (dato.compareTo(this.valor) > 0) {
             if (der == null) {
                 der = new ABB();
             }
@@ -34,7 +43,9 @@ public class ABB <T extends Comparable<T>>{
 
     public boolean buscar(T dato) {
         if (valor != null) {
-            if(dato.compareTo(this.valor) == 0) return true;
+            if (dato.compareTo(this.valor) == 0) {
+                return true;
+            }
             if (dato.compareTo(this.valor) < 0 && izq != null) {
                 return izq.buscar(dato);
             } else if (dato.compareTo(this.valor) > 0 && izq != null) {
@@ -42,7 +53,7 @@ public class ABB <T extends Comparable<T>>{
             } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
@@ -70,7 +81,7 @@ public class ABB <T extends Comparable<T>>{
             this.valor = (T) auxiliar.valor;
             this.izq = auxiliar.izq;
             this.der = auxiliar.der;
-
+            cuenta--;
         } else {// caso 3 : eliminar un nodo hoja
             if (padre != null) {
                 if (this == padre.der) {
@@ -81,46 +92,41 @@ public class ABB <T extends Comparable<T>>{
                 padre = null;
             }
             valor = null;
+            cuenta--;
         }
     }
 
-    
     public void eliminar(T dato) {
         if (valor != null) {
             if (dato.compareTo(this.valor) == 0) {
                 eliminarNodo();
-            } else if (dato.compareTo(this.valor)<0) {
+            } else if (dato.compareTo(this.valor) < 0) {
                 izq.eliminar(dato);
-            } else if (dato.compareTo(this.valor)>0) {
+            } else if (dato.compareTo(this.valor) > 0) {
                 der.eliminar(dato);
             }
         }
     }
- 
-    public void inOrden() {
+
+    public ArrayList<T> inOrden(){
+        ArrayList<T> nodos = new ArrayList<>();
+        inOrden(nodos);
+        return nodos;
+    }
+    public ArrayList<T> inOrden(ArrayList<T> nodos) {
         if (valor != null) {
-            System.out.print("<");
-            if (izq != null) {
-                izq.inOrden();
-            } else {
-                System.out.print("*");
-            }
-            System.out.print(valor);
-            if (der != null)  {
-                der.inOrden();
-            } else {
-                System.out.print("*");
-            }
-            System.out.print(">");
+            if (izq != null) nodos=izq.inOrden(nodos);
+            //System.out.print("-"+valor+"-");
+            nodos.add(valor);
+            if(der != null) nodos=der.inOrden(nodos);
         }
+        return nodos;
     }
 
-    
     public boolean esHoja() {
         return valor != null && izq == null && der == null;
     }
 
-    
     public boolean esVacio() {
         return valor == null;
     }
